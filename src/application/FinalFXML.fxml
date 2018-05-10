@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXMLController">
+   <children>
+      <Pane prefHeight="474.0" prefWidth="490.0">
+         <children>
+            <Label id="Title" fx:id="fxTitle" layoutX="7.0" layoutY="23.0" prefHeight="46.0" prefWidth="478.0" text="Mens College Basketball Standings">
+               <font>
+                  <Font size="31.0" />
+               </font>
+            </Label>
+            <Pane id="paneBegin" fx:id="fxPaneBegin" layoutX="7.0" layoutY="69.0" prefHeight="404.0" prefWidth="478.0">
+               <children>
+                  <Button fx:id="fxBtnBegin" layoutX="204.0" layoutY="202.0" mnemonicParsing="false" onAction="#begin_Click" text="View Data" />
+                  <Label layoutX="201.0" layoutY="175.0" prefHeight="17.0" prefWidth="77.0" text="Click to begin" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
