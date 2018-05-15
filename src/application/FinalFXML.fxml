@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -17,26 +18,44 @@
                   <Font size="31.0" />
                </font>
             </Label>
-            <Pane id="paneBegin" fx:id="fxPaneBegin" layoutX="7.0" layoutY="69.0" prefHeight="404.0" prefWidth="478.0">
+            <Pane fx:id="fxDataPane" prefHeight="404.0" prefWidth="490.0">
                <children>
-                  <Button fx:id="fxBtnBegin" layoutX="204.0" layoutY="202.0" mnemonicParsing="false" onAction="#begin_Click" text="View Data" />
-                  <Label layoutX="201.0" layoutY="175.0" prefHeight="17.0" prefWidth="77.0" text="Click to begin" />
+                  <Button fx:id="fxBtnBack" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" onAction="#Back_Click" text="Back" />
+                  <TableView fx:id="fxDataTable" editable="true" layoutY="146.0" prefHeight="330.0" prefWidth="490.0">
+                    <columns>
+                      <TableColumn fx:id="fxTeamID" prefWidth="75.0" text="TeamID" />
+                      <TableColumn fx:id="fxTeamName" prefWidth="106.39990997314453" text="TeamName" />
+                        <TableColumn fx:id="fxWinLoss" prefWidth="69.5999755859375" text="WinLoss" />
+                        <TableColumn fx:id="fxGamesBehind" prefWidth="125.5999755859375" text="GamesBehind" />
+                        <TableColumn fx:id="fxWinPercent" prefWidth="114.39996337890625" text="WinPercentage" />
+                    </columns>
+                  </TableView>
                </children>
             </Pane>
-         </children>
-      </Pane>
-      <Pane fx:id="fxDataPane" layoutY="70.0" prefHeight="404.0" prefWidth="490.0">
-         <children>
-            <Button fx:id="fxBtnBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#Back_Click" text="Back" />
-            <TableView fx:id="fxDataTable" editable="true" layoutY="72.0" prefHeight="330.0" prefWidth="490.0">
-              <columns>
-                <TableColumn fx:id="fxTeamID" prefWidth="75.0" text="TeamID" />
-                <TableColumn fx:id="fxTeamName" prefWidth="106.39990997314453" text="TeamName" />
-                  <TableColumn fx:id="fxWinLoss" prefWidth="69.5999755859375" text="WinLoss" />
-                  <TableColumn fx:id="fxGamesBehind" prefWidth="125.5999755859375" text="GamesBehind" />
-                  <TableColumn fx:id="fxWinPercent" prefWidth="114.39996337890625" text="WinPercentage" />
-              </columns>
-            </TableView>
+            <Pane id="paneBegin" fx:id="fxPaneBegin" layoutX="7.0" layoutY="69.0" prefHeight="404.0" prefWidth="478.0">
+               <children>
+                  <Button fx:id="fxBtnBegin" layoutX="174.0" layoutY="251.0" mnemonicParsing="false" onAction="#begin_Click" text="View Followed Teams" />
+                  <Label layoutX="201.0" layoutY="175.0" prefHeight="17.0" prefWidth="77.0" />
+                  <Button fx:id="fxBtnView" layoutX="190.0" layoutY="209.0" mnemonicParsing="false" onAction="#Standing_Click" text="View Standings" />
+               </children>
+            </Pane>
+            <Pane fx:id="fxPaneStanding" layoutY="92.0" prefHeight="382.0" prefWidth="490.0">
+               <children>
+                  <Button fx:id="fxBtnBack1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#Back_Click" text="Back" />
+                  <TableView fx:id="fxDataTable1" editable="true" layoutY="72.0" prefHeight="330.0" prefWidth="490.0">
+                     <columns>
+                        <TableColumn fx:id="fxTeamID1" prefWidth="75.0" text="TeamID" />
+                        <TableColumn fx:id="fxTeamName1" prefWidth="106.39990997314453" text="TeamName" />
+                        <TableColumn fx:id="fxWinLoss1" prefWidth="69.5999755859375" text="WinLoss" />
+                        <TableColumn fx:id="fxGamesBehind1" prefWidth="125.5999755859375" text="GamesBehind" />
+                        <TableColumn fx:id="fxWinPercent1" prefWidth="114.39996337890625" text="WinPercentage" />
+                     </columns>
+                  </TableView>
+                  <Label layoutX="93.0" layoutY="18.0" text="Id: " />
+                  <TextField fx:id="fxIdTextBox" layoutX="109.0" layoutY="14.0" prefHeight="25.0" prefWidth="25.0" />
+                  <Button layoutX="154.0" layoutY="14.0" mnemonicParsing="false" onAction="#Follow_Click" text="Follow Team" />
+               </children>
+            </Pane>
          </children>
       </Pane>
    </children>

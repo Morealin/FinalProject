@@ -38,6 +38,7 @@ public class FXMLController implements Initializable{
 		// TODO Auto-generated method stub
 		String query1 = "Select * from standings";
 		fxDataPane.setVisible(false);
+		fxPaneStanding.setVisible(false);
 		try {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
@@ -46,25 +47,55 @@ public class FXMLController implements Initializable{
 				e.printStackTrace();
 			}
 			
-			ArrayList<ArrayList<String>> Scrape = new ArrayList<ArrayList<String>>();
 			Document doc;
 			try {
 				doc = Jsoup.connect("http://espn.go.com/mens-college-basketball/conferences/standings/_/id/2/year/2012/acc-conference").get();
 
-
+        		List<Team> initialList = new ArrayList<Team>();
+        		int i = 1;
 		    for (Element table : doc.select("table.tablehead")) {
 		        for (Element row : table.select("tr")) {
 		            Elements tds = row.select("td");
-		            ArrayList<String> temp = new ArrayList<String>();;
 		            if (tds.size() > 6) {
-		            	for (int i = 0; i < 6;i++) {
-			            	temp.add(tds.get(i).text());
-
+		            	if (tds.get(0).text() != "ACC") {
+		            	int TeamID = i;
+		            	i++;
+        				String TeamName = tds.get(0).text();
+        				String WinLoss = tds.get(1).text();
+        				try {
+        					int GamesBehind = Integer.parseInt(tds.get(2).text());
+	        				String WinPercent = tds.get(3).text();
+	        				
+	        				Team TeamInstance = new Team(TeamID,TeamName,WinLoss,GamesBehind,WinPercent);
+	        				
+	        				initialList.add(TeamInstance);
+        				} catch (Exception e) {
+        					int GamesBehind = 0;
+	        				String WinPercent = tds.get(3).text();
+	        				
+	        				Team TeamInstance = new Team(TeamID,TeamName,WinLoss,GamesBehind,WinPercent);
+	        				
+	        				initialList.add(TeamInstance);
+        				}
 		            	}
-		                Scrape.add(temp);
 		            }
 		        }
 		    }
+			ObservableList<Team> observableScrape = FXCollections.observableArrayList(initialList);
+		    PropertyValueFactory<Team,String> TeamID = new PropertyValueFactory<Team,String>("TeamID");
+			PropertyValueFactory<Team,String> TeamName = new PropertyValueFactory<Team,String>("TeamName");
+			PropertyValueFactory<Team,String> WinLoss = new PropertyValueFactory<Team,String>("WinLoss");
+			PropertyValueFactory<Team,String> GamesBehind = new PropertyValueFactory<Team,String>("GamesBehind");
+			PropertyValueFactory<Team,String> WinPercentage = new PropertyValueFactory<Team,String>("WinPercent");
+
+			fxTeamID1.setCellValueFactory(TeamID);
+			fxTeamName1.setCellValueFactory(TeamName);
+			fxWinLoss1.setCellValueFactory(WinLoss);
+			fxGamesBehind1.setCellValueFactory(GamesBehind);
+			fxWinPercent1.setCellValueFactory(WinPercentage);
+			
+			fxDataTable1.setItems(observableScrape);
+		    
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -113,8 +144,14 @@ public class FXMLController implements Initializable{
 	@FXML
 	Pane fxDataPane;
 	
+	@FXML
+	Pane fxPaneStanding;
+	
     @FXML
     private TableView<Team> fxDataTable;
+    
+    @FXML
+    private TableView<Team> fxDataTable1;
 
     @FXML
     private TableColumn<Team, String> fxTeamID;
@@ -130,6 +167,21 @@ public class FXMLController implements Initializable{
 
     @FXML
     private TableColumn<Team, String> fxWinPercent;
+    
+    @FXML
+    private TableColumn<Team, String> fxTeamID1;
+
+    @FXML
+    private TableColumn<Team, String> fxTeamName1;
+
+    @FXML
+    private TableColumn<Team, String> fxWinLoss1;
+
+    @FXML
+    private TableColumn<Team, String> fxGamesBehind1;
+
+    @FXML
+    private TableColumn<Team, String> fxWinPercent1;
 	
 	@FXML
 	private void begin_Click(ActionEvent e) {
@@ -138,6 +190,15 @@ public class FXMLController implements Initializable{
 	}
 	public void Back_Click(ActionEvent e) {
 		fxDataPane.setVisible(false);
+		fxPaneStanding.setVisible(false);
 		fxPaneBegin.setVisible(true);
+	}
+	@FXML
+	public void Standing_Click(ActionEvent e) {
+		fxPaneBegin.setVisible(false);
+		fxPaneStanding.setVisible(true);
+	}
+	public void Follow_Click(ActionEvent e) {
+		
 	}
 }
