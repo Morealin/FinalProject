@@ -28,8 +28,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.TextField;
+
 
 public class FXMLController implements Initializable{
+
+	public List<Team> initial = new ArrayList<Team>();
 
 
 	@SuppressWarnings({ "unchecked", "null" })
@@ -51,7 +55,6 @@ public class FXMLController implements Initializable{
 			try {
 				doc = Jsoup.connect("http://espn.go.com/mens-college-basketball/conferences/standings/_/id/2/year/2012/acc-conference").get();
 
-        		List<Team> initialList = new ArrayList<Team>();
         		int i = 1;
 		    for (Element table : doc.select("table.tablehead")) {
 		        for (Element row : table.select("tr")) {
@@ -68,20 +71,20 @@ public class FXMLController implements Initializable{
 	        				
 	        				Team TeamInstance = new Team(TeamID,TeamName,WinLoss,GamesBehind,WinPercent);
 	        				
-	        				initialList.add(TeamInstance);
+	        				initial.add(TeamInstance);
         				} catch (Exception e) {
         					int GamesBehind = 0;
 	        				String WinPercent = tds.get(3).text();
 	        				
 	        				Team TeamInstance = new Team(TeamID,TeamName,WinLoss,GamesBehind,WinPercent);
 	        				
-	        				initialList.add(TeamInstance);
+	        				initial.add(TeamInstance);
         				}
 		            	}
 		            }
 		        }
 		    }
-			ObservableList<Team> observableScrape = FXCollections.observableArrayList(initialList);
+			ObservableList<Team> observableScrape = FXCollections.observableArrayList(initial);
 		    PropertyValueFactory<Team,String> TeamID = new PropertyValueFactory<Team,String>("TeamID");
 			PropertyValueFactory<Team,String> TeamName = new PropertyValueFactory<Team,String>("TeamName");
 			PropertyValueFactory<Team,String> WinLoss = new PropertyValueFactory<Team,String>("WinLoss");
@@ -136,6 +139,7 @@ public class FXMLController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 	
 	@FXML
@@ -182,6 +186,12 @@ public class FXMLController implements Initializable{
 
     @FXML
     private TableColumn<Team, String> fxWinPercent1;
+    
+    @FXML
+    private TextField fxIdTextBox1;
+    
+    @FXML
+    private TextField fxIdTextBox;
 	
 	@FXML
 	private void begin_Click(ActionEvent e) {
@@ -192,6 +202,7 @@ public class FXMLController implements Initializable{
 		fxDataPane.setVisible(false);
 		fxPaneStanding.setVisible(false);
 		fxPaneBegin.setVisible(true);
+		fxDataTable.refresh();
 	}
 	@FXML
 	public void Standing_Click(ActionEvent e) {
@@ -199,6 +210,49 @@ public class FXMLController implements Initializable{
 		fxPaneStanding.setVisible(true);
 	}
 	public void Follow_Click(ActionEvent e) {
-		
+		  Connection connection = null;
+		try {
+			int TeamID = initial.get(Integer.parseInt(fxIdTextBox.getText())-1).getTeamID();
+			String TeamName = initial.get(Integer.parseInt(fxIdTextBox.getText())-1).getTeamName();
+			String WinLoss = initial.get(Integer.parseInt(fxIdTextBox.getText())-1).getWinLoss();
+			int GamesBehind = initial.get(Integer.parseInt(fxIdTextBox.getText())-1).getGamesBehind();
+			String WinPercent = initial.get(Integer.parseInt(fxIdTextBox.getText())-1).getWinPercent();
+			
+			connection = DriverManager.getConnection("jdbc:mysql://www.db4free.net:3306/finalproject","morealin","g?c%usFt");
+	          Statement statement = connection.createStatement();
+	          String insert = "INSERT INTO finalproject.standings (TeamId,TeamName,WinLoss,GamesBehind,WinPercent) VALUES ('" + TeamID + "','" + TeamName + "','" + WinLoss + "','" + GamesBehind + "','" + WinPercent + "');";
+	          statement.executeUpdate(insert);
+	          System.out.println("Inserted");
+//	          String selectInitial = "SELECT * FROM finalproject.standings";
+//              statement.executeQuery(selectInitial);
+	          fxDataTable.refresh();
+
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		finally {
+            if (connection != null) try { connection.close(); } catch(Exception e1) {}
+    }
+	}
+	public void Delete_Click(ActionEvent e) {
+		  Connection connection = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://www.db4free.net:3306/finalproject","morealin","g?c%usFt");
+	          String deleteExcess = "DELETE FROM standings WHERE TeamID = " + fxIdTextBox1.getText() + ";";
+	          Statement statement = connection.createStatement();
+	          statement.executeUpdate(deleteExcess);
+	          System.out.println("Deleted");
+//	          String selectInitial = "SELECT * FROM finalproject.standings";
+//              statement.executeQuery(selectInitial);
+	          fxDataTable.refresh();
+
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		finally {
+            if (connection != null) try { connection.close(); } catch(Exception e1) {}
+    }
 	}
 }
